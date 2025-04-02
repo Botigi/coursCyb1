@@ -49,14 +49,21 @@ char* lire(const liste* liste, int position)
 
 int ajouter(liste* liste, int position, const char* element)
 {
+    if (liste == NULL || element == NULL) {
+        return 0;
+    }
     // gerer le cas ou la capacite est negative i.e. infinie
+    if (liste->capacite < 0) {
+        liste->capacite = 100;  // valeur par défaut
+        liste->tableau = realloc(liste->tableau, sizeof(char*) * liste->capacite);
+    }
     if (liste->taille == liste->capacite) {
         return 0;
     }
-    if (position < 0 ) {
-        return 0;
+    if (position < 0) {
+        position = liste->taille;  // ajout en fin de liste par défaut
     }
-    if ( position > liste->taille  || position == -1) {
+    if (position > liste->taille) {
         position = liste->taille;
     }
     for (int i = liste->taille; i > position; i--) {

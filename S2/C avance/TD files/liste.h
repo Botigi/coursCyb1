@@ -10,12 +10,25 @@
 //
 // A- Type d'une liste - A COMPLETER en fonction de la solution retenue
 //
+#ifndef IMPL_CHAINEE
+    typedef struct {
+        char* element;
+        struct maillon* suivant;
+    } maillon;
+#endif
+
 
 typedef struct {
-    char** tableau;
     int capacite;
     int taille;
+    #ifndef IMPL_CHAINEE
+    char** tableau;
+    #else
+    maillon* tete;
+    maillon* queue;
+    #endif
 } liste;
+
 
 //
 // B.1- Fonctions de création et suppression de liste - ATTENTION : prototypes NON MODIFIABLES
