@@ -6,8 +6,10 @@
 
 liste* creer(int capacite)
 {
+    // attention au cas ou capacite = -1 alors on alloue 100 et on realoura plus tard si la limite est atteinte
     liste* liste = malloc(sizeof(liste));
     liste->capacite = capacite;
+    liste->tableau = malloc(sizeof(char*) * liste->capacite);
     liste->taille = 0;
     if ( liste == NULL ) {
         return NULL;
@@ -17,10 +19,7 @@ liste* creer(int capacite)
 
 void supprimer(liste* liste)
 {
-
-    for (int i = 0; i < liste->taille; i++) {
-        free(liste->tableau[i]);
-    }
+    free(liste->tableau);
     free(liste);
 }
 
