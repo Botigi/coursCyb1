@@ -1,7 +1,88 @@
 #include <stdio.h>
 #include <string.h>
+#include <stddef.h>
 
 #include "liste.h"
+
+liste* creer(int capacite)
+{
+    liste* liste = malloc(sizeof(liste));
+    liste->capacite = capacite;
+    liste->taille = 0;
+    if ( liste == NULL ) {
+        return NULL;
+    }
+    return liste;
+}
+
+void supprimer(liste* liste)
+{
+
+    for (int i = 0; i < liste->taille; i++) {
+        free(liste->tableau[i]);
+    }
+    free(liste);
+}
+
+int taille(const liste* liste)
+{
+    if ( liste == NULL ) {
+        return -1;
+    }
+    return liste->taille;
+}
+
+int estVide(const liste* liste)
+{
+    if ( liste == NULL ) {
+        return 0;
+    }
+    return liste->taille == 0;
+}
+
+char* lire(const liste* liste, int position)
+{
+    if ( liste == NULL ) {
+        return NULL;
+    }
+    return liste->tableau[position];
+}
+
+int ajouter(liste* liste, int position, const char* element)
+{
+    // gerer le cas ou la capacite est negative i.e. infinie
+    if (liste->taille == liste->capacite) {
+        return 0;
+    }
+    if (position < 0 ) {
+        return 0;
+    }
+    if ( position > liste->taille  || position == -1) {
+        position = liste->taille;
+    }
+    for (int i = liste->taille; i > position; i--) {
+        liste->tableau[i] = liste->tableau[i - 1];
+    }
+    liste->tableau[position] = strdup(element);
+    liste->taille += 1;
+    return 1;
+}
+
+char* retirer(liste* liste, int position)
+{
+    if (liste->taille == 0) {
+        return NULL;
+    }
+    if (position < 0 || position >= liste->taille) {
+        return NULL;
+    }
+    char* element = liste->tableau[position];
+    for (int i = position; i < liste->taille - 1; i++) {
+        liste->tableau[i] = liste->tableau[i + 1];
+    }
+    liste->taille -= 1;
+    return element;
+}
 
 // retourne une chaine representant la liste donnée
 char* enChaine(const liste* liste) {

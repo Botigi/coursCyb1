@@ -12,8 +12,9 @@
 //
 
 typedef struct {
-    // à modifier / compléter
-    int pourCompiler;
+    char** tableau;
+    int capacite;
+    int taille;
 } liste;
 
 //
