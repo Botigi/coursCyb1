@@ -1,5 +1,5 @@
 #ifndef LISTES-CHAINES_H
-#define LISTES-CHAINESH
+#define LISTES-CHAINES_H
 
 #include <stdlib.h>
 #include <stddef.h>
