@@ -6,8 +6,7 @@ struct stack_p
 {
   int elt;
   struct stack_p * next;
-}     
-
+};
 struct stack_p *push(struct stack_p *head, int val)
 {
   struct stack_p *new_node = malloc(sizeof(struct stack_p));
@@ -47,7 +46,7 @@ int Push(struct stack_t *s, int elt){
 }
 
 int Pop(struct stack_t *s){
-    if(IsEmpty(s)
+    if(IsEmpty(s) )
     return (-1);
     
     s->len-=1;
@@ -62,7 +61,7 @@ int Head(struct stack_t *s){
 }
 
 int IsFull(struct stack_t *s){
-    return(s->len == s->max_len)
+    return(s->len == s->max_len);
 }
 
 int IsEmpty(struct stack_t *s){
