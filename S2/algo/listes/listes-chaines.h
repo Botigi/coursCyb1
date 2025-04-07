@@ -1,5 +1,5 @@
-#ifndef LIST_H
-#define LIST_H
+#ifndef LISTES-CHAINES_H
+#define LISTES-CHAINESH
 
 #include <stdlib.h>
 #include <stddef.h>
@@ -24,4 +24,4 @@ struct list_node* list_find(struct list_node* head, int value);
 struct list_node* list_prepend(struct list_node* head, int value);
 void list_print(struct list_node* head);
 
-#endif // LIST_H
+#endif // LISTES-CHAINESH
