@@ -19,8 +19,8 @@
 
 
 typedef struct {
-    int capacite;
     int taille;
+    int capacite;
     #ifndef IMPL_CHAINEE
     char** tableau;
     #else

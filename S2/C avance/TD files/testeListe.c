@@ -6,10 +6,24 @@
 
 liste* creer(int capacite)
 {
+    if (capacite < 0) {
+        int capacite_effective = 100;  // valeur par défaut
+    }
+    int capacite_effective = capacite;
     // attention au cas ou capacite = -1 alors on alloue 100 et on realoura plus tard si la limite est atteinte
     liste* liste = malloc(sizeof(liste));
+    if ( liste == NULL ) {
+        return NULL;
+    }
+    #ifndef IMPL_CHAINEE
+    
     liste->capacite = capacite;
-    liste->tableau = malloc(sizeof(char*) * liste->capacite);
+    liste->tableau = malloc(sizeof(char*) * capacite_effective);
+
+    #else
+    liste->tete = NULL;
+    liste->queue = NULL;
+    #endif
     liste->taille = 0;
     if ( liste == NULL ) {
         return NULL;
@@ -19,11 +33,16 @@ liste* creer(int capacite)
 
 void supprimer(liste* liste)
 {
+    #ifndef IMPL_CHAINEE
+    for (int i = 0; i < liste->taille; i++) {
+        free(liste->tableau[i]);
+    }
     free(liste->tableau);
+    #endif
     free(liste);
 }
 
-int taille(const liste* liste)
+int taille(const liste* liste)  // independante de chainee ou tableau
 {
     if ( liste == NULL ) {
         return -1;
@@ -31,7 +50,7 @@ int taille(const liste* liste)
     return liste->taille;
 }
 
-int estVide(const liste* liste)
+int estVide(const liste* liste) // independante de chainee ou tableau
 {
     if ( liste == NULL ) {
         return 0;
@@ -39,12 +58,25 @@ int estVide(const liste* liste)
     return liste->taille == 0;
 }
 
-char* lire(const liste* liste, int position)
+char* lire(const liste* liste, int position) 
 {
     if ( liste == NULL ) {
         return NULL;
     }
+    if (position < 0 || position >= liste->taille) {
+        return NULL;
+    }
+    #ifndef IMPL_CHAINEE
+    
     return liste->tableau[position];
+    
+    #endif
+    maillon* maillon = liste->tete;
+    while (position > 0) {
+        maillon = maillon->suivant;
+        position --;
+    }
+    return maillon->element;
 }
 
 int ajouter(liste* liste, int position, const char* element)
@@ -53,10 +85,11 @@ int ajouter(liste* liste, int position, const char* element)
         return 0;
     }
     // gerer le cas ou la capacite est negative i.e. infinie
-    if (liste->capacite < 0) {
-        liste->capacite = 100;  // valeur par défaut
-        liste->tableau = realloc(liste->tableau, sizeof(char*) * liste->capacite);
+    #ifndef IMPL_CHAINEE
+    if (liste->capacite < 0 && liste->taille % 100 == 0) {
+        liste->tableau = realloc(liste->tableau, sizeof(char*) * 100);
     }
+    #endif
     if (liste->taille == liste->capacite) {
         return 0;
     }
@@ -66,10 +99,25 @@ int ajouter(liste* liste, int position, const char* element)
     if (position > liste->taille) {
         position = liste->taille;
     }
+    #ifndef IMPL_CHAINEE
     for (int i = liste->taille; i > position; i--) {
         liste->tableau[i] = liste->tableau[i - 1];
     }
     liste->tableau[position] = strdup(element);
+    #endif
+    
+    while (position > 1 ) {
+        liste->tete = liste->tete->suivant;
+        position --;
+    }
+    
+    maillon* nouveau = malloc(sizeof(maillon));
+    if (nouveau == NULL) {
+        return 0;
+    }
+    liste->tete->suivant = nouveau;
+    nouveau->element = strdup(element);
+    nouveau->suivant = liste->tete->suivant;
     liste->taille += 1;
     return 1;
 }
@@ -82,10 +130,18 @@ char* retirer(liste* liste, int position)
     if (position < 0 || position >= liste->taille) {
         return NULL;
     }
+    #ifndef IMPL_CHAINEE
     char* element = liste->tableau[position];
     for (int i = position; i < liste->taille - 1; i++) {
         liste->tableau[i] = liste->tableau[i + 1];
     }
+    #endif
+    while (position > 1) { 
+        liste->tete = liste->tete->suivant;
+        position --;
+    }
+    liset->tete->suivant = liste->tete->suivant->suivant;
+
     liste->taille -= 1;
     return element;
 }
