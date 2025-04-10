@@ -116,3 +116,28 @@ struct node* ABR_insertF_iter( struct* root, int value)
         return root;
     }
 }
+
+struct node* ABR_insertF_iterProf( struct* root, int value) 
+{
+    struct node * newNode = malloc(sizeof(struct node));
+    newNode->key = value;
+    newNode->left_child = NULL;
+    newNode->right_child = NULL;
+    
+    if(root == NULL) {
+        return newNode;
+    }               
+    struct node * current = root;                    //boucle utile pour trouber la position a la quel inserer 
+    struct node * parent = root;                     //boucle utile pour trouber la position a la quel inserer 
+ 
+    while(current != NULL) {                         //boucle utile pour trouber la position a la quel inserer 
+        parent = current;                            //boucle utile pour trouber la position a la quel inserer 
+        if(current->key > value) {                   //boucle utile pour trouber la position a la quel inserer 
+            current = current->left_child;           //boucle utile pour trouber la position a la quel inserer 
+        } else { current = current->right_child; }   //boucle utile pour trouber la position a la quel inserer 
+    }
+    if(parent->key >= value) {
+        parent->left_child = newNode;
+    } else { parent->right_child = newNode;}
+    return root;
+}                                                                      
