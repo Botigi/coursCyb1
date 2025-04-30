@@ -2,16 +2,16 @@
 #define FILE_H
 
 #include <stdlib.h>
+#include "liste.h"
 
 // ***
 // INTERFACE D'UN SERVICE DE GESTION DE FILES de chaines caractères
 // ***
 
 //
-// A- Type d'une file - A COMPLETER en fonction de la solution retenue
+// A- Type d'une file - Structure utilisant liste.h
 //
-
-typedef int file; // pour compiler
+typedef liste file;
 
 //
 // B.1- Fonctions de création et suppression de file - ATTENTION : prototypes NON MODIFIABLES

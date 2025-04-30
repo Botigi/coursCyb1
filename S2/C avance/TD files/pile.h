@@ -2,16 +2,16 @@
 #define PILE_H
 
 #include <stdlib.h>
+#include "liste.h"
 
 // ***
 // INTERFACE D'UN SERVICE DE GESTION DE PILES de chaines caractères
 // ***
 
 //
-// A- Type d'une pile - A COMPLETER en fonction de la solution retenue
+// A- Type d'une pile - Structure utilisant liste.h
 //
-
-typedef int pile; // pour compiler
+typedef liste pile;
 
 //
 // B.1- Fonctions de création et suppression de pile - ATTENTION : prototypes NON MODIFIABLES
@@ -35,6 +35,7 @@ pile* creerP(int capacite);
 void supprimerP(pile* pile);
 
 // B.2- Fonctions de consultation d'une pile - ATTENTION : prototypes NON MODIFIABLES
+//
 
 /*
     Retourne la taille de la pile spécifiée.
