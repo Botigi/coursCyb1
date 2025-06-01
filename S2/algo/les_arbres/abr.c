@@ -141,3 +141,240 @@ struct node* ABR_insertF_iterProf( struct* root, int value)
     } else { parent->right_child = newNode;}
     return root;
 }                                                                      
+
+
+
+
+
+// Fonction pour supprimer un élément dans l'ABR
+struct node* ABR_Delete(struct node *root, int value) {
+    if (root == NULL) {
+        return NULL;
+    }
+
+    struct node *delNode = root;
+    struct node *parent = root;
+
+
+    // Trouver le nœud à supprimer (Parcours jusqu'à la valeur ou NULL)
+
+    while(delNode != NULL && delNode->key != value) {
+        parent = delNode;
+        if (value < delNode->key) {
+            delNode = delNode->left_child;
+        } else {
+            delNode = delNode->right_child;
+        }
+    }
+
+    if(delNode == NULL) {
+        return root; // La valeur n'existe pas dans l'arbre
+    }
+    // Cas 1 : Nœud à supprimer est une feuille (n'a pas d'enfants)
+    if (delNode->left_child == NULL && delNode->right_child == NULL) {
+        /* pas necessaire 
+        if(delNode == root) {
+            free(delNode);
+            return NULL;
+        }
+        */
+        if(parent->key > value){
+            parent->left_child = NULL;
+        } else {
+            parent->right_child = NULL;
+        }
+        free(delNode);
+        delNode = NULL;
+        return root;
+    }
+
+    // Cas 2 : Nœud à supprimer a un enfant gauche
+    if (delNode->left_child != NULL && delNode->right_child == NULL) {
+        if(delNode == root){
+            root = root->left_child;
+        }
+        else if(parent->key > value){
+                parent->left_child = delNode->left_child;
+        }
+        else{
+            parent->right_child = delNode->left_child;
+        }
+    }
+    free(delNode);
+    delNode = NULL;
+    return root;
+
+        // Cas 2 bis : Nœud à supprimer a un enfant droit
+        if (delNode->left_child == NULL && delNode->right_child != NULL) {
+            if(delNode == root){
+                root = root->right_child;
+            }
+            else if(parent->key > value){
+                    parent->left_child = delNode->right_child;
+            }
+            else{
+                parent->right_child = delNode->right_child;
+            }
+        }
+        free(delNode);
+        delNode = NULL;
+        return root;
+
+
+
+}
+
+
+
+// Fonction pour créer un nouveau nœud
+struct node* createNode(int key) {
+    struct node* newNode = malloc(sizeof(struct node));
+    if (newNode != NULL) {
+        newNode->key = key;
+        newNode->left = NULL;
+        newNode->right = NULL;
+    }
+    return newNode;
+}
+
+// Fonction pour supprimer un nœud
+void freeNode(struct node* node) {
+    if (node != NULL) {
+        free(node);
+    }
+}
+
+struct node* deleteNode(struct node* root, int value) {
+    if (root == NULL || root->key == value) {
+        return NULL; // L'arbre est vide
+    }
+
+    struct node* delNode = root;
+    struct node* parent = NULL;
+
+    // Trouver le nœud à supprimer
+    while (delNode != NULL && delNode->key != value) {
+        parent = delNode;
+        if (value < delNode->key) {
+            delNode = delNode->left;
+        } else {
+            delNode = delNode->right;
+        }
+    }
+
+    if (delNode == NULL) {
+        return root; // La valeur n'existe pas dans l'arbre
+    }
+
+    // Cas 1 : Aucun enfant
+    if (delNode->left == NULL && delNode->right == NULL) {
+        if (parent != NULL) {
+            if (parent->left == delNode) {
+                parent->left = NULL;
+            } else {
+                parent->right = NULL;
+            }
+        } else {
+            root = NULL; // Suppression de la racine
+        }
+        freeNode(delNode);
+        return root;
+    }
+
+    // Cas 2.1 : Un enfant gauche
+    if (delNode->left != NULL && delNode->right == NULL) {
+        if (parent != NULL) {
+            if (parent->left == delNode) {
+                parent->left = delNode->left;
+            } else {
+                parent->right = delNode->left;
+            }
+        } else {
+            root = delNode->left; // Suppression de la racine
+        }
+        freeNode(delNode);
+        return root;
+    }
+
+    // Cas 2.2 : Un enfant droit
+    if (delNode->left == NULL && delNode->right != NULL) {
+        if (parent != NULL) {
+            if (parent->left == delNode) {
+                parent->left = delNode->right;
+            } else {
+                parent->right = delNode->right;
+            }
+        } else {
+            root = delNode->right; // Suppression de la racine
+        }
+        freeNode(delNode);
+        return root;
+    }
+
+    // Cas 3 : Deux enfants
+    if (delNode->left != NULL && delNode->right != NULL) {
+        struct node* greatestNode = delNode->left;
+        struct node* greatestParent = delNode;
+
+        // Trouver le plus grand nœud dans le sous-arbre gauche
+        while (greatestNode->right != NULL) {
+            greatestParent = greatestNode;
+            greatestNode = greatestNode->right;
+        }
+
+        if ( greatestNode->left != NULL ){
+            greatestParent->right = greatestNode->left;
+        }
+
+        // Réassigner les pointeurs du nœud à supprimer
+        greatestNode->left = delNode->left;
+        greatestNode->right = delNode->right;
+
+        // Si le nœud à supprimer est la racine sion placer le nouveau noeud
+        if (parent == NULL) {
+            root = greatestNode;
+        } else if (parent->left == delNode) {
+            parent->left = greatestParent->right;
+        } else {
+            parent->right = greatestParent->right;
+        }
+
+        freeNode(delNode);
+    }
+
+    return root;
+}
+
+struct node *deleteNode(struct node *root, int value){ //correction loop
+    // cas 1 (aucun fils)
+    
+    // cas 2.1 (fils gauche)
+    
+    // cas 2.2 (fils droite)
+    
+    // cas 3 (2 fils)
+    if (delNode->left!=NULL && delNode->right!=NULL){
+        struct node *greatestNode = delNode->left;
+        struct node *greatestParent = delNode->left;
+        while(delNode->right != NULL){
+            greatestParent=greatestNode;
+            greatestNode=greatestNode->right;
+        }
+        if (delNode==root) root=greatestNode;
+        
+        if(parent->key >= value){
+            parent->left=greatestNode;
+        }else{
+            parent->right=greatestNode;
+        }
+        
+        greatestNode->right=delNode->right;
+        if (greatestNode != delNode->left){
+            greatestParent->right=greatestNode->left;
+            greatestNode->left=delNode-left;
+        }
+        free(delNode);
+        delNode==NULL;
+        return root;
+    }
+}
